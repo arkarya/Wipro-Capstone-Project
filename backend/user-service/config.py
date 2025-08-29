@@ -1,0 +1,8 @@
+DB_USER = 'dba'
+DB_PASSWORD = 'Password%401'
+DB_HOST = 'db'
+DB_PORT = 3306
+DB_NAME = 'travel_app'
+
+SQLALCHEMY_DATABASE_URI = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+SQLALCHEMY_TRACK_MODIFICATIONS = False

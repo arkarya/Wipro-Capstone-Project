@@ -1,0 +1,58 @@
+<div class="container-fluid py-5" style="min-height: 100vh;">
+  <!-- Search Bar -->
+  <div class="row mb-4 justify-content-center">
+    <div class="col-8 col-md-6">
+      <input
+        class="form-control bg-white bg-opacity-75"
+        placeholder="Search packages..."
+        [(ngModel)]="query"
+        (keyup.enter)="load()"
+      />
+    </div>
+    <div class="col-4 col-md-2">
+      <button class="btn btn-primary w-100" (click)="load()">Search</button>
+    </div>
+  </div>
+
+  <!-- Loading/Error Messages -->
+  <div *ngIf="loading" class="text-center text-secondary mb-3">
+    Loading packages...
+  </div>
+  <div *ngIf="error" class="alert alert-danger text-center">
+    {{ error }}
+  </div>
+
+  <!-- Package Cards -->
+  <div class="row g-4">
+    <div *ngFor="let pkg of packages" class="col-sm-12 col-md-6 col-lg-4">
+      <div
+        class="card h-100 shadow-sm border-0 hover-shadow"
+        style="cursor: pointer;"
+        (click)="view(pkg)"
+        tabindex="0"
+        role="button"
+        (keydown.enter)="view(pkg)"
+      >
+        <img [src]="pkg.image_url1"
+          class="card-img-top"
+          alt="{{ pkg.name }} image"
+          style="height: 200px; object-fit: cover; border-top-left-radius: 0.375rem; border-top-right-radius: 0.375rem;"
+          
+        />
+
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title text-primary">{{ pkg.name }}</h5>
+          <p class="card-text mb-1 text-muted">
+            {{ pkg.destination }} &bull; {{ pkg.duration_days }} days
+          </p>
+          <p class="text-success fw-bold mb-3">
+            ₹ {{ pkg.price | number:'1.0-0' }}
+          </p>
+          <button class="btn btn-outline-primary mt-auto w-100" (click)="view(pkg)">
+            View Details
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

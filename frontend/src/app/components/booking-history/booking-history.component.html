@@ -1,0 +1,58 @@
+<div class="container-fluid min-vh-100 mt-4">
+  <h3 class="mb-3">📅 My Bookings</h3>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="text-center my-4">
+    <div class="spinner-border text-primary" role="status" aria-label="Loading bookings...">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <!-- No bookings -->
+  <div *ngIf="!loading && bookings.length === 0" class="alert alert-info text-center">
+    You have no bookings yet.
+  </div>
+
+  <!-- Booking Table -->
+  <div *ngIf="!loading && bookings.length > 0" class="table-responsive">
+    <table class="table table-bordered table-hover align-middle text-center">
+      <thead >
+        <tr>
+          <th scope="col">Package ID</th>
+          <th scope="col">Name</th>
+          <th scope="col">Start Date</th>
+          <th scope="col">Adults</th>
+          <th scope="col">Children</th>
+          <th scope="col">Amount Paid</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let b of bookings">
+          <td>{{ b.package_id }}</td>
+          <td>{{ b.name }}</td>
+          <td>{{ b.start_date | date: 'mediumDate' }}</td>
+          <td>{{ b.total_adults }}</td>
+          <td>{{ b.total_children }}</td>
+          <td>{{ b.amt_paid }}</td>
+          <td>
+            <button
+              class="btn btn-sm btn-outline-primary me-2"
+              (click)="edit(b)"
+              aria-label="Edit booking"
+            >
+              Edit
+            </button>
+            <button
+              class="btn btn-sm btn-outline-danger"
+              (click)="delete(b)"
+              aria-label="Delete booking"
+            >
+              Cancel
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,47 @@
+<div class="container py-4 min-vh-100">
+  <div *ngIf="loading" class="text-center my-5">
+    <div class="spinner-border text-primary" role="status"></div>
+    <p class="mt-2">Loading package details...</p>
+  </div>
+
+  <div *ngIf="pkg" class="card shadow-sm">
+    <div class="row g-0">
+      <div class="col-md-5" *ngIf="pkg.image_url1">
+        <img
+          [src]="pkg.image_url1"
+          class="img-fluid rounded-start h-100 object-fit-cover"
+          alt="{{ pkg.name }}"
+        />
+      </div>
+      <div class="col-md-7">
+        <div class="card-body d-flex flex-column justify-content-between h-100">
+          <div>
+            <h3 class="card-title mb-3">{{ pkg.name }}</h3>
+            <p class="card-text text-muted">
+              {{ pkg.destination }} • {{ pkg.duration_days }} days
+            </p>
+            <p class="card-text">{{ pkg.description }}</p>
+            <p class="card-text">
+              <strong class="text-success">Price: ₹ {{ pkg.price }}</strong>
+            </p>
+          </div>
+
+          <div class="mt-4 d-flex flex-wrap gap-2">
+            <button class="btn btn-success" (click)="book()">Book Now</button>
+
+            <!-- Admin-only actions -->
+            <ng-container *ngIf="isAdmin">
+              <button class="btn btn-outline-primary" (click)="editPackage()">Edit</button>
+              <button class="btn btn-outline-danger" (click)="deletePackage()">Delete</button>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Admin: Add New Package -->
+  <div *ngIf="isAdmin" class="text-end mt-4">
+    <button class="btn btn-primary" (click)="addPackage()">Add New Package</button>
+  </div>
+</div>

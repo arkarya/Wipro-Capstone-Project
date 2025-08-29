@@ -1,0 +1,102 @@
+services:
+  booking:
+    image: booking:v2
+    build:
+      context: ./backend/booking-service
+    container_name: booking
+    ports:
+      - "5001:5001"
+    depends_on:
+      db:
+        condition: service_healthy
+    hostname: booking
+    networks:
+      - travel_net
+   
+
+  package:
+    image: package:v2
+    build:
+      context: ./backend/package-service
+    container_name: package
+    ports:
+      - "5002:5002"
+    depends_on:
+      db:
+        condition: service_healthy
+    hostname: package
+    networks:
+      - travel_net
+
+  user:
+    image: user:v2
+    build:
+      context: ./backend/user-service
+    container_name: user
+    ports:
+      - "5003:5003"
+    depends_on:
+      db:
+        condition: service_healthy
+    hostname: user
+    networks:
+      - travel_net
+   
+
+  gateway:
+    image: gateway:v2
+    build:
+      context: ./backend/gateway
+    container_name: gateway
+    ports:
+      - "5000:5000"
+    depends_on:
+      booking:
+        condition: service_started
+      package:
+        condition: service_started
+      user:
+        condition: service_started
+    hostname: gateway
+    networks:
+      - travel_net
+   
+  frontend:
+    image: frontend:v2
+    build:
+      context: ./frontend
+    container_name: frontend
+    ports:
+      - "4200:80"
+    depends_on:
+      - gateway
+    hostname: frontend
+    networks:
+      - travel_net
+
+  db:
+    image: mysql:latest
+    restart: always
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=travel_app
+      - MYSQL_USER=dba
+      - MYSQL_PASSWORD=Password@1
+    ports:
+      - "3307:3306"
+    volumes:
+      - travel_data:/var/lib/mysql
+    networks:
+      - travel_net
+
+volumes:
+  travel_data:
+
+networks:
+  travel_net:
+    driver: bridge

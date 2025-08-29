@@ -1,0 +1,107 @@
+<div class="container mt-4">
+  <div class="card p-3">
+    <h4>{{ isEdit ? "Edit Booking" : "New Booking" }}</h4>
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      
+      <div class="mb-3">
+        <label for="name" class="form-label">Name</label>
+        <input
+          id="name"
+          type="text"
+          class="form-control"
+          formControlName="name"
+          placeholder="Your full name"
+        />
+        <div *ngIf="f['name'].touched && f['name'].invalid" class="text-danger small">
+          <div *ngIf="f['name'].errors?.['required']">Name is required.</div>
+          <div *ngIf="f['name'].errors?.['minlength']">Name must be at least 2 characters.</div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input
+          id="email"
+          type="email"
+          class="form-control"
+          formControlName="email"
+          placeholder="your.email@example.com"
+        />
+        <div *ngIf="f['email'].touched && f['email'].invalid" class="text-danger small">
+          <div *ngIf="f['email'].errors?.['required']">Email is required.</div>
+          <div *ngIf="f['email'].errors?.['email']">Enter a valid email.</div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="phone" class="form-label">Phone</label>
+        <input
+          id="phone"
+          type="tel"
+          class="form-control"
+          formControlName="phone"
+          placeholder="e.g. 9876543210"
+        />
+        <div *ngIf="f['phone'].touched && f['phone'].invalid" class="text-danger small">
+          <div *ngIf="f['phone'].errors?.['required']">Phone is required.</div>
+          <div *ngIf="f['phone'].errors?.['pattern']">Enter a valid phone number.</div>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col">
+          <label for="total_adults" class="form-label">Adults</label>
+          <input
+            id="total_adults"
+            type="number"
+            min="1"
+            class="form-control"
+            formControlName="total_adults"
+            placeholder="Number of adults, max 5"
+          />
+          <div *ngIf="f['total_adults'].touched && f['total_adults'].invalid" class="text-danger small">
+            <div *ngIf="f['total_adults'].errors?.['required']">Adults count is required.</div>
+            <div *ngIf="f['total_adults'].errors?.['min']">At least 1 adult required.</div>
+            <div *ngIf="f['total_adults'].errors?.['max']">Maximum 5 per booking allowed.</div>
+          </div>
+        </div>
+
+        <div class="col">
+          <label for="total_children" class="form-label">Children</label>
+          <input
+            id="total_children"
+            type="number"
+            min="0"
+            class="form-control"
+            formControlName="total_children"
+            placeholder="Number of children, max 3"
+          />
+          <div *ngIf="f['total_children'].touched && f['total_children'].invalid" class="text-danger small">
+            <div *ngIf="f['total_children'].errors?.['min']">Cannot be negative.</div>
+            <div *ngIf="f['total_children'].errors?.['max']">Maximum 3 per booking allowed</div>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+      <div class="mb-3">
+        <label for="start_date" class="form-label">Start Date</label>
+        <div class="form-control bg-light form-control" style="pointer-events: none;">
+            {{ form.get('start_date')?.value | date: 'mediumDate' }}
+        </div>
+      </div>
+      </div>
+      <!-- Amount Summary -->
+      <div class="mb-3 col">
+        <label class="form-label">Total Amount</label>
+        <div class="form-control bg-light" style="pointer-events: none;">
+          ₹ {{ calculatedAmount  || 0 }}
+        </div>
+      </div>
+
+
+      <button type="submit" class="btn btn-primary" [disabled]="form.invalid">
+        {{ isEdit ? "Update" : "Book" }}
+      </button>
+    </form>
+  </div>
+</div>
